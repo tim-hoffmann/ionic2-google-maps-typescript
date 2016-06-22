@@ -10,8 +10,30 @@ import { NavController } from 'ionic-angular';
   Ionic pages and navigation.
 */
 @Component({
-  templateUrl: 'build/pages/map/map.html',
+    templateUrl: 'build/pages/map/map.html',
 })
 export class MapPage {
-  constructor(private nav: NavController) {}
+    private map: google.maps.Map;
+
+    constructor(private nav: NavController) {
+        this.initMap();
+    }
+
+    initMap() {
+        navigator.geolocation.getCurrentPosition((position) => {
+
+            let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            let mapOptions = {
+                center: latLng,
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+
+            this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+        }, (error) => {
+            console.log(error);
+        });
+    }
 }
